@@ -915,7 +915,7 @@ function orgGroups(list){
   }).join('');
 }
 
-/* ======================================================================== aba Investidores */
+/* ======================================================================== aba Eletropostos */
 function invBody(){
   const all=stations(), list=filterSt(all);
   if(S.view==='mapa'){
@@ -1011,7 +1011,7 @@ function rootHTML(){
     <div class="searchrow"><label class="search">${ic('search',19)}<input id="q" type="search" placeholder="Buscar nome, eletroposto ou cidade" autocomplete="off" aria-label="Buscar"></label>
       <button class="icon-btn" data-a="filtros" aria-label="Filtros">${ic('sliders',20)}<span class="badge dot" id="fbadge" hidden></span></button></div>
     </div></div>
-    <div class="tabs" role="tablist"><button class="tab" id="tab-inv" data-a="tab" data-v="inv" role="tab">Investidores <span class="count" id="c-inv"></span></button><button class="tab" id="tab-mot" data-a="tab" data-v="mot" role="tab">Motoristas <span class="count" id="c-mot"></span></button></div>
+    <div class="tabs" role="tablist"><button class="tab" id="tab-inv" data-a="tab" data-v="inv" role="tab">Eletropostos <span class="count" id="c-inv"></span></button><button class="tab" id="tab-mot" data-a="tab" data-v="mot" role="tab">Motoristas <span class="count" id="c-mot"></span></button></div>
   </div><div class="scroll" id="body"></div>`;
 }
 let root;
@@ -1030,7 +1030,7 @@ function renderBody(keepScroll=true){
   body.classList.toggle('mapmode', S.tab==='inv' && S.view==='mapa');
   $('#tab-inv',root).classList.toggle('on',S.tab==='inv'); $('#tab-mot',root).classList.toggle('on',S.tab==='mot');
   $('#tab-inv',root).setAttribute('aria-selected',S.tab==='inv'); $('#tab-mot',root).setAttribute('aria-selected',S.tab==='mot');
-  $('#c-inv',root).textContent = S.scope==='meus' ? Object.keys(INV).length : ORG.length;
+  $('#c-inv',root).textContent = stations().length;
   $('#c-mot',root).textContent = drivers().length;
   $('#fbadge',root).hidden = !(S.tab==='inv' ? (S.model||S.fst) : (S.dst.length||S.dcx.length||S.dchip!=='todos'));
   body.scrollTop = keepScroll ? y : 0;
@@ -1555,38 +1555,38 @@ function scrollToEl(sel,extra=0){ setTimeout(()=>{ const v=stack.length?stack[st
   if(el) sc.scrollTo({top:Math.max(0,el.offsetTop-sc.offsetTop-12-extra),behavior:'smooth'}); },420); }
 
 const FLOWS = [
-  {id:'meus', g:'Investidores', t:'Meus eletropostos', d:'Os eletropostos que você vendeu, cada um com a bomba como avatar e o faturamento do mês.',
+  {id:'meus', g:'Eletropostos', t:'Meus eletropostos', d:'Os eletropostos que você vendeu, cada um com a bomba como avatar e o faturamento do mês.',
    passos:[{t:'Resumo do mês e frota',k:'inv-meus',go:()=>go('inv-meus')},
            {t:'Lista com filtro por situação',k:'inv-meus',go:()=>{ go('inv-meus'); scrollToEl('#lhead'); }},
            {t:'Filtrar pela frota: Mobi Fast',k:'inv-meus',go:()=>{ go('inv-meus'); S.model='fast'; renderBody(); scrollToEl('.fleet',40); }},
            {t:'Detalhe do eletroposto',k:'posto',go:()=>go('posto','p1')}],
    notas:['Cada card é um eletroposto: avatar da bomba (7, 40 ou 80 kW), investidor e faturamento do mês.','A frota mostra quantos de cada modelo; tocar num avatar filtra a lista.','O estado aparece sem abrir o card: carregando agora, offline ou em instalação, com a etapa.'],
    sim:['recarga','offline','reset']},
-  {id:'org', g:'Investidores', t:'Minha organização', d:'Os eletropostos da sua rede, agrupados pelo licenciado que vendeu.',
+  {id:'org', g:'Eletropostos', t:'Minha organização', d:'Os eletropostos da sua rede, agrupados pelo licenciado que vendeu.',
    passos:[{t:'Resumo da rede',k:'inv-org',go:()=>go('inv-org')},
            {t:'Grupos por licenciado',k:'inv-org',go:()=>{ go('inv-org'); scrollToEl('.org'); }},
            {t:'Eletroposto de outro licenciado',k:'posto',go:()=>go('posto','o3')}],
    notas:['Cada grupo traz o total do mês do licenciado e um WhatsApp para falar com ele.','O investidor da rede aparece só com o primeiro nome: o contato fica com quem vendeu.'],
    sim:['push','reset']},
-  {id:'mapa', g:'Investidores', t:'Mapa dos eletropostos', d:'Os mesmos eletropostos no mapa, com o avatar da bomba como pino.',
+  {id:'mapa', g:'Eletropostos', t:'Mapa dos eletropostos', d:'Os mesmos eletropostos no mapa, com o avatar da bomba como pino.',
    passos:[{t:'Meus eletropostos no mapa',k:'inv-mapa',go:()=>go('inv-mapa')},
            {t:'Organização em grupos',k:'inv-mapa-org',go:()=>go('inv-mapa','org')},
            {t:'Abrir pelo carrossel',k:'posto',go:()=>{ go('inv-mapa'); setTimeout(()=>selectPin('p2',true),80); setTimeout(()=>pushView(postoHTML('p2'),'posto','p2'),650); }}],
    notas:['Pinos próximos viram um grupo com a contagem e a soma do mês; tocar no grupo aproxima.','O carrossel acompanha o pino tocado. Arraste para mover; use + e − ou a roda do mouse.','Mapa ilustrativo: no app entra o mapa real, com o endereço de cada eletroposto.'],
    sim:['recarga','offline','reset']},
-  {id:'posto-op', g:'Eletroposto', t:'Eletroposto operando', d:'O detalhe de um eletroposto que está carregando agora.',
+  {id:'posto-op', g:'Detalhe do eletroposto', t:'Eletroposto operando', d:'O detalhe de um eletroposto que está carregando agora.',
    passos:[{t:'Conectores ao vivo',k:'posto',go:()=>go('posto','p1')},
            {t:'Faturamento por dia',k:'posto',go:()=>{ go('posto','p1'); S.bar=17; refreshRev(); scrollToEl('#revCard'); }},
            {t:'Investidor e atividade',k:'posto',go:()=>{ go('posto','p1'); scrollToEl('.person',50); }},
            {t:'Status da implantação',k:'contrato',go:()=>{ go('posto','p1'); setTimeout(()=>ACT.contrato(null,{id:'p1'}),380); }}],
    notas:['Toque numa barra para ver o dia; a média não conta hoje, que ainda está em andamento.','O WhatsApp do investidor já abre com o resultado do mês escrito.','A atividade reúne os pushes desse eletroposto.'],
    sim:['recarga','push','reset']},
-  {id:'posto-off', g:'Eletroposto', t:'Eletroposto offline', d:'Quando os conectores param de se comunicar.',
+  {id:'posto-off', g:'Detalhe do eletroposto', t:'Eletroposto offline', d:'Quando os conectores param de se comunicar.',
    passos:[{t:'Aviso de offline no topo',k:'posto',go:()=>go('posto','p4')},
            {t:'Avisar o investidor',k:'wa',go:()=>{ go('posto','p4'); setTimeout(()=>ACT.wa(null,{k:'inv',id:'p4',tpl:'off'}),380); }}],
    notas:['O alerta aparece no card da lista, no pino do mapa e no topo do detalhe.','Um toque abre a mensagem pronta para o investidor.'],
    sim:['voltar','push','reset']},
-  {id:'posto-inst', g:'Eletroposto', t:'Em instalação', d:'Um eletroposto vendido que ainda está sendo implantado.',
+  {id:'posto-inst', g:'Detalhe do eletroposto', t:'Em instalação', d:'Um eletroposto vendido que ainda está sendo implantado.',
    passos:[{t:'Etapa atual da implantação',k:'posto',go:()=>{ go('posto','p5'); scrollToEl('.tl',70); }},
            {t:'Atualizar a investidora',k:'wa',go:()=>{ go('posto','p5'); setTimeout(()=>ACT.wa(null,{k:'inv',id:'p5',tpl:'inst'}),380); }}],
    notas:['A linha do tempo mostra as cinco etapas: contrato, pagamento, vistoria, instalação e ativação.','A etapa atual fica em destaque; o contrato mostra cada assinatura com a data.'],
