@@ -384,20 +384,19 @@ button:focus-visible,a:focus-visible,input:focus-visible{outline:2px solid var(-
 .opp-big b{font-size:30px;font-weight:600;color:var(--a-ink);font-variant-numeric:tabular-nums;letter-spacing:-.02em;line-height:1.1}
 .opp-big span{font-size:16px;font-weight:500;color:var(--a-ink2)}
 .opp-sub{font-size:14.5px;color:var(--a-ink2);margin-top:2px}
-.opp-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:14px}
-.opp-c{min-width:0;display:flex;flex-direction:column;gap:10px;padding:10px;border:1px solid var(--a-line);border-radius:14px;background:#fff;text-align:left;color:var(--a-ink);transition:background .15s,border-color .15s,box-shadow .15s}
+.opp-grid{display:flex;flex-direction:column;gap:8px;margin-top:14px}
+.opp-c{min-width:0;display:grid;grid-template-columns:32px minmax(0,1fr) auto 20px;align-items:center;gap:12px;padding:10px 12px;border:1px solid var(--a-line);border-radius:14px;background:#fff;text-align:left;color:var(--a-ink);transition:background .15s,border-color .15s,box-shadow .15s}
 .opp-c:hover{border-color:#CDD3D8}
 .opp-c.on{border-color:var(--g7);background:var(--g0);box-shadow:0 0 0 3px rgba(43,122,59,.12)}
-.opp-t{display:flex;align-items:center;gap:8px;min-width:0}
-.opp-ic{width:28px;height:28px;border-radius:50%;background:var(--slate-bg);display:grid;place-items:center;color:var(--a-ink2);flex:none}
+.opp-ic{width:32px;height:32px;border-radius:50%;background:var(--slate-bg);display:grid;place-items:center;color:var(--a-ink2);flex:none}
 .opp-c.on .opp-ic{background:var(--g7);color:#fff}
-.opp-n{flex:1;min-width:0;font-size:14px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.opp-ck{width:18px;height:18px;border-radius:50%;flex:none;box-sizing:border-box;box-shadow:inset 0 0 0 1.5px #C9D0D6;display:grid;place-items:center;color:#fff}
+.opp-m{min-width:0;display:flex;flex-direction:column;gap:7px}
+.opp-n{font-size:14.5px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.opp-ck{width:20px;height:20px;border-radius:50%;flex:none;box-sizing:border-box;box-shadow:inset 0 0 0 1.5px #C9D0D6;display:grid;place-items:center;color:#fff}
 .opp-c.on .opp-ck{background:var(--g7);box-shadow:none}
-.opp-v{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--a-ink2)}
+.opp-v{font-size:13px;color:var(--a-ink2);white-space:nowrap;text-align:right;min-width:52px}
 .opp-v b{font-size:16px;font-weight:600;color:var(--amber);font-variant-numeric:tabular-nums}
-.opp-v>span:first-child{flex:none}
-.opp-bar{flex:1;height:6px;border-radius:3px;background:#F3DFB0;overflow:hidden}
+.opp-bar{display:block;height:5px;border-radius:3px;background:#F3DFB0;overflow:hidden}
 .opp-bar i{display:block;height:100%;background:var(--g6)}
 .opp-foot{font-size:12.5px;color:var(--a-ink3);margin:10px 0 0}
 .dr{background:#fff;border-radius:20px;padding:14px;display:flex;flex-direction:column;gap:12px;cursor:pointer;flex:none}
@@ -458,8 +457,11 @@ button:focus-visible,a:focus-visible,input:focus-visible{outline:2px solid var(-
 .cx-row+.cx-row{border-top:1px solid var(--a-line)}
 .cx-row .cx{width:36px;height:36px}
 .cx-row div{flex:1;min-width:0}
-.cx-row b{display:block;font-size:15px;font-weight:600}
+.cx-row b{display:block;font-size:14.5px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .cx-row small{display:block;font-size:13px;color:var(--a-ink2);margin-top:2px}
+.cx-st{flex:none;width:106px;height:36px;box-sizing:border-box;border-radius:12px;display:inline-flex;align-items:center;justify-content:center;gap:6px;font-size:13.5px;font-weight:600;white-space:nowrap}
+.cx-st.ok{background:var(--g1);color:var(--g7)}
+.cx-st.go{border:1px solid var(--g2);background:var(--g0);color:var(--g7)}
 
 /* folhas (bottom sheets) */
 .overlay{position:absolute;inset:0;background:rgba(10,16,13,.44);opacity:0;pointer-events:none;transition:opacity .25s;z-index:40}
@@ -974,8 +976,10 @@ function oppCard(all){
     <div class="opp-big"><b>${none}</b><span>de ${all.length}</span></div><div class="opp-sub">motoristas ainda sem nenhuma conexão iGreen</div>
     <div class="opp-grid">${CXK.map(k=>{const has=all.filter(d=>d.cx.includes(k)).length, sem=all.length-has, on=S.dcx.includes(k);
       return `<button class="opp-c ${on?'on':''}" data-a="dcx" data-v="${k}" aria-pressed="${on}">
-        <span class="opp-t"><span class="opp-ic">${ic(CX[k].i,15)}</span><span class="opp-n">${CX[k].s}</span><i class="opp-ck">${on?ic('check',12,3):''}</i></span>
-        <span class="opp-v"><span><b>${sem}</b> sem</span><span class="opp-bar" title="${has} de ${all.length} já têm"><i style="width:${Math.round(has/all.length*100)}%"></i></span></span>
+        <span class="opp-ic">${ic(CX[k].i,16)}</span>
+        <span class="opp-m"><span class="opp-n">${CX[k].n}</span><span class="opp-bar" title="${has} de ${all.length} já têm"><i style="width:${Math.round(has/all.length*100)}%"></i></span></span>
+        <span class="opp-v"><b>${sem}</b> sem</span>
+        <i class="opp-ck">${on?ic('check',12,3):''}</i>
       </button>`;}).join('')}</div>
     <p class="opp-foot">Toque para listar quem ainda não tem. Dá para marcar mais de uma.</p>
   </section>`;
@@ -1287,7 +1291,7 @@ function motHTML(id){
       <div class="m-actions"><button class="btn wa" data-a="wa" data-k="mot" data-id="${id}">${wa(18)} WhatsApp</button><button class="btn" data-a="call" data-v="${d.tel}">${ic('phone',18)} Ligar</button><button class="btn icon" data-a="copy" data-v="${d.tel}" aria-label="Copiar telefone">${ic('copy',18)}</button></div></section>
     ${vf}
     <section class="card"><h3>Conexões iGreen</h3><p style="margin:4px 0 4px;font-size:13.5px;color:var(--a-ink2)">${miss.length?`${miss.length} ${miss.length>1?'conexões':'conexão'} para oferecer a ${firstName(d.nome)}`:'Já tem todas as conexões disponíveis'}</p>
-      ${CXK.map(k=>{const has=d.cx.includes(k); return `<div class="cx-row"><span class="cx ${has?'has':'no'}">${ic(CX[k].i,17)}</span><div><b>${CX[k].n}</b><small>${has?'Contratada':'Ainda não tem'}</small></div>${has?`<span class="pill green">${ic('check',13,2.4)}</span>`:`<button class="btn sm wa-out" data-a="wa" data-k="mot" data-id="${id}" data-tpl="${k}">Oferecer</button>`}</div>`;}).join('')}</section>
+      ${CXK.map(k=>{const has=d.cx.includes(k); return `<div class="cx-row"><span class="cx ${has?'has':'no'}">${ic(CX[k].i,17)}</span><div><b>${CX[k].n}</b><small>${has?'Já está na carteira':'Ainda não tem'}</small></div>${has?`<span class="cx-st ok">${ic('check',14,2.6)} Contratada</span>`:`<button class="cx-st go" data-a="wa" data-k="mot" data-id="${id}" data-tpl="${k}">${wa(15)} Oferecer</button>`}</div>`;}).join('')}</section>
     <section class="card"><h3>Uso em outubro</h3>
       <div class="kpis"><div><b>${d.rec}</b><span>recargas</span></div><div><b>${nf(d.kwh)} kWh</b><span>energia</span></div><div><b>${brl(d.gasto)}</b><span>gasto</span></div><div><b>${d.rec?brl(d.gasto/d.rec):'—'}</b><span>ticket médio</span></div></div>
       <div class="rows"><div class="row"><span class="ri">${ic('clock',15)}</span><span class="rl">Horário</span><span class="rv">${d.hor}</span></div><div class="row"><span class="ri">${ic('bolt',15)}</span><span class="rl">Onde recarrega</span><span class="rv">${st.nome}</span></div></div>
